@@ -17,10 +17,10 @@
         </div>
         <div class="col-lg-5 px-5 text-end">
             <div class="h-100 d-inline-flex align-items-center">
-                <a class="btn btn-square border-end border-start" href=""><i class="fab fa-facebook-f"></i></a>
+                {{-- <a class="btn btn-square border-end border-start" href=""><i class="fab fa-facebook-f"></i></a>
                 <a class="btn btn-square border-end" href=""><i class="fab fa-twitter"></i></a>
                 <a class="btn btn-square border-end" href=""><i class="fab fa-linkedin-in"></i></a>
-                <a class="btn btn-square border-end" href=""><i class="fab fa-instagram"></i></a>
+                <a class="btn btn-square border-end" href=""><i class="fab fa-instagram"></i></a> --}}
             </div>
         </div>
     </div>
@@ -42,10 +42,11 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav ms-auto py-3 py-lg-0 ">
             <a class="nav-item nav-link" href="{{ route('/') }}">Home</a>
-            <a class="nav-item nav-link" href="{{ route('profile') }}">Profile</a>
             <a class="nav-item nav-link" href="{{ route('galeri') }}">Galeri</a>
+            <a class="nav-item nav-link" href="{{ route('profile') }}">Tentang Kami</a>
             <a class="nav-item nav-link" href="{{ route('kontak') }}">Kontak Kami</a>
-            <div class="nav-item dropdown">
+            <a class="nav-item nav-link" href="{{ route('layanan') }}">Layanan Kami</a>
+            {{-- <div class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Layanan</a>
                 <div class="dropdown-menu bg-light m-0">
                     <a href="{{ route('kanopi') }}" class="dropdown-item">Canopy</a>
@@ -61,10 +62,10 @@
                     <a href="{{ route('tanggabesi') }}" class="dropdown-item">Tangga Besi</a>
                     <a href="{{ route('menaratangkiair') }}" class="dropdown-item">Menara Tangki Air</a>
                 </div>
-            </div>
+            </div> --}}
             @guest
                 @if (Route::has('login'))
-                        <a class="nav-item nav-link" href="{{ route('login') }}">Login</a>
+                    <a class="nav-item nav-link" href="{{ route('login') }}">Login</a>
                 @endif
 
                 {{-- @if (Route::has('register'))
@@ -78,21 +79,36 @@
                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                         Menu
                     </a>
+                    @if (auth()->user()->is_admin == 1)
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('admin') }}">
+                                Admin Panel
+                            </a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
 
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="{{ route('admin') }}">
-                            Admin Panel
-                        </a>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                            onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
-                        </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
+                    @else
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item"  href="{{ route('userprofile') }}">
+                                Profil Saya
+                            </a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
 
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
-                    </div>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </div>
                 </li>
+                @endif
             @endguest
         </div>
     </div>

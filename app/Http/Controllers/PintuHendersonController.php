@@ -7,6 +7,7 @@ use App\Http\Requests\StorePintuHendersonRequest;
 use App\Http\Requests\UpdatePintuHendersonRequest;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Support\Facades\File;
@@ -26,14 +27,16 @@ class PintuHendersonController extends Controller
 
     public function landingindex()
     {
+        $user = Auth::user();
         $postpintu = PintuHenderson::orderBy('created_at', 'desc')->get();
-        return view('landingpage.barang.baranghenderson', compact('postpintu'));
+        return view('landingpage.barang.baranghenderson', compact('postpintu','user'));
     }
 
     public function landingdetail($id)
     {
         $pintu = PintuHenderson::find($id);
-        return view('landingpage.barang.detailbarang.pintuhenderson', compact('pintu'));
+        $user = Auth::user();
+        return view('landingpage.barang.detailbarang.pintuhenderson', compact('pintu','user'));
     }
     /**
      * Show the form for creating a new resource.
@@ -125,8 +128,9 @@ class PintuHendersonController extends Controller
             "bahan" => $request["bahan"],
             "deskripsi" => $request["deskripsi"],
             "jenis_produk" => $request["jenis_produk"],
+            "status" => $request["status"],
         ]);
-        toast('pagar has been edited !', 'success')->autoClose(1500)->width('400px');
+        Alert::success('Success', 'Data Pintu Henderon has been editted !');
         return redirect('/admin/pintuhenderson');
     }
 

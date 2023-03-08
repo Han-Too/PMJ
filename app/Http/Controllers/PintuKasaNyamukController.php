@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PintuKasaNyamuk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Support\Facades\File;
@@ -23,14 +24,16 @@ class PintuKasaNyamukController extends Controller
 
     public function landingindex()
     {
+        $user = Auth::user();
         $pintu = PintuKasaNyamuk::orderBy('created_at', 'desc')->get();
-        return view('landingpage.barang.barangpintukasa', compact('pintu'));
+        return view('landingpage.barang.barangpintukasa', compact('pintu','user'));
     }
 
     public function landingdetail($id)
     {
         $pintu = PintuKasaNyamuk::find($id);
-        return view('landingpage.barang.detailbarang.pintukasanyamuk', compact('pintu'));
+        $user = Auth::user();
+        return view('landingpage.barang.detailbarang.pintukasanyamuk', compact('pintu','user'));
     }
     /**
      * Show the form for creating a new resource.
@@ -122,8 +125,8 @@ class PintuKasaNyamukController extends Controller
             "bahan" => $request["bahan"],
             "deskripsi" => $request["deskripsi"],
             "jenis_produk" => $request["jenis_produk"],
+            "status" => $request["status"],
         ]);
-        toast('Pintu Kasa Nyamuk has been edited !', 'success')->autoClose(1500)->width('400px');
         Alert::success('Success', 'Data Pintu Kasa Nyamuk has been Edited !');
         return redirect('/admin/pintukasanyamuk');
     }
