@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateMenaraAirRequest;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Support\Facades\File;
@@ -22,20 +23,22 @@ class MenaraAirController extends Controller
     public function index()
     {
         $postmenaraair = MenaraAir::orderBy('created_at', 'desc')->get();
-        return view('adminpage.barangpages.menara', compact('postmenaraair'));
+        return view('adminpage.barangpages.menaraair.menaraair', compact('postmenaraair'));
     }
 
 
     public function landingindex()
     {
+        $user = Auth::user();
         $postmenaraair = MenaraAir::orderBy('created_at', 'desc')->get();
-        return view('landingpage.barang.barangmenaratangkiair', compact('postmenaraair'));
+        return view('landingpage.barang.barangmenaratangkiair', compact('postmenaraair','user'));
     }
 
     public function landingdetail($id)
     {
+        $user = Auth::user();
         $postmenaraair = MenaraAir::find($id);
-        return view('landingpage.barang.detailbarang.menaraair', compact('postmenaraair'));
+        return view('landingpage.barang.detailbarang.menaraair', compact('postmenaraair','user'));
     }
 
 
@@ -129,8 +132,9 @@ class MenaraAirController extends Controller
             "bahan" => $request["bahan"],
             "deskripsi" => $request["deskripsi"],
             "jenis_produk" => $request["jenis_produk"],
+            "status" => $request["status"],
         ]);
-        toast('Menara Air has been edited !', 'success')->autoClose(1500)->width('400px');
+        Alert::success('Success', 'Data Menara Air has been uploaded !');
         return redirect('/admin/menaraair');
     }
 

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTanggaPutarRequest;
 use App\Http\Requests\UpdateTanggaPutarRequest;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Support\Facades\File;
@@ -24,13 +25,15 @@ class TanggaPutarController extends Controller
     }
     public function landingindex()
     {
+        $user = Auth::user();
         $posttanggaputar = TanggaPutar::orderBy('created_at', 'desc')->get();
-        return view('landingpage.barang.barangtanggaputar', compact('posttanggaputar'));
+        return view('landingpage.barang.barangtanggaputar', compact('posttanggaputar','user'));
     }
     public function landingdetail($id)
     {
         $tanggaputar = TanggaPutar::find($id);
-        return view('landingpage.barang.detailbarang.tanggaputar', compact('tanggaputar'));
+        $user = Auth::user();
+        return view('landingpage.barang.detailbarang.tanggaputar', compact('tanggaputar','user'));
     }
 
     /**
@@ -123,8 +126,9 @@ class TanggaPutarController extends Controller
             "bahan" => $request["bahan"],
             "deskripsi" => $request["deskripsi"],
             "jenis_produk" => $request["jenis_produk"],
+            "status" => $request["status"],
         ]);
-        toast('Tangga Putar has been edited !', 'success')->autoClose(1500)->width('400px');
+        Alert::success('Success', 'Data Tangga Putar has been uploaded !');
         return redirect('/admin/tanggaputar');
     }
 

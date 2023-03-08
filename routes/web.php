@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +17,21 @@ use App\Http\Controllers\TanggaPutarController;
 use App\Http\Controllers\TanggaBesiController;
 use App\Http\Controllers\MenaraAirController;
 
+use App\Http\Controllers\LaporanPekerjaanController;
+use App\Http\Controllers\SuratJalanController;
+
 use App\Http\Controllers\KaryawanController;
+use App\Http\Controllers\PekerjaanController;
 use App\Http\Controllers\GajiKaryawanController;
 
-
+use App\Http\Controllers\KontakController;
+use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\JumbotronController;
-use App\Http\Controllers\LaporanPekerjaanController;
+use App\Http\Controllers\LayananController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\ProfileController;
+
+
 
 // ---------------------------ADMIN PAGE------------------------
 
@@ -32,6 +42,10 @@ Route::get('admin/home', [HomeController::class, 'adminHome'])->name('admin.home
 Route::get('/admin', function () {
     return view('adminpage.dashboard');
 })->name('admin')->middleware('is_admin');
+
+// Route::get('/back', function () {
+//     return redirect()->back();
+// })->name('back');
 // Route::post('/login', [LoginController::class, 'login'])->name('login')->middleware('is_admin');
 
 // ---------------------CANOPY ADMIN---------------------
@@ -150,14 +164,26 @@ Route::put('/admin/jumbotron/{id}/update', [JumbotronController::class, 'update'
 Route::get('/admin/jumbotron/{id}/destroy', [JumbotronController::class, 'destroy'])->name('admin.jumbotron.destroy')->middleware('is_admin');
 Route::get('/admin/jumbotron/{id}/preview', [JumbotronController::class, 'show'])->name('admin.jumbotron.preview')->middleware('is_admin');
 
+// ------------------------ADMIN GALERI------------------------
+Route::get('/admin/galeri', [GaleriController::class, 'index'])->name('admin.galeri.index')->middleware('is_admin');
+Route::get('/admin/galeri/create', [GaleriController::class, 'create'])->name('admin.galeri.create')->middleware('is_admin');
+Route::post('/admin/galeri/store', [GaleriController::class, 'store'])->name('admin.galeri.store')->middleware('is_admin');
+Route::get('/admin/galeri/{id}/edit', [GaleriController::class, 'edit'])->name('admin.galeri.edit')->middleware('is_admin');
+Route::put('/admin/galeri/{id}/update', [GaleriController::class, 'update'])->name('admin.galeri.update')->middleware('is_admin');
+Route::get('/admin/galeri/{id}/destroy', [GaleriController::class, 'destroy'])->name('admin.galeri.destroy')->middleware('is_admin');
+Route::get('/admin/galeri/{id}/preview', [GaleriController::class, 'show'])->name('admin.galeri.preview')->middleware('is_admin');
 
-// ----------------------ADMIN SIDEBAR--------------------
-Route::get('/admin/daftarbarang', function () {
-    return view('adminpage.barangpages.daftarbarang');
-})->name('barang');
-Route::get('/admin/daftarkaryawan', function () {
-    return view('adminpage.karyawanpages.daftarkaryawan');
-})->name('karyawan');
+
+// ----------------------PEKERJAAN--------------------
+Route::get('/admin/pekerjaan', [PekerjaanController::class, 'index'])->name('admin.pekerjaan.index')->middleware('is_admin');
+Route::get('/admin/pekerjaan/create', [PekerjaanController::class, 'create'])->name('admin.pekerjaan.create')->middleware('is_admin');
+Route::post('/admin/pekerjaan/store', [PekerjaanController::class, 'store'])->name('admin.pekerjaan.store')->middleware('is_admin');
+Route::get('/admin/pekerjaan/{id}/edit', [PekerjaanController::class, 'edit'])->name('admin.pekerjaan.edit')->middleware('is_admin');
+Route::put('/admin/pekerjaan/{id}/update', [PekerjaanController::class, 'update'])->name('admin.pekerjaan.update')->middleware('is_admin');
+Route::get('/admin/pekerjaan/{id}/destroy', [PekerjaanController::class, 'destroy'])->name('admin.pekerjaan.destroy')->middleware('is_admin');
+Route::get('/admin/pekerjaan/{id}/preview', [PekerjaanController::class, 'show'])->name('admin.pekerjaan.preview')->middleware('is_admin');
+Route::get('/admin/pekerjaan/cetak', [PekerjaanController::class, 'cetak_pdf'])->name('admin.pekerjaan.print')->middleware('is_admin');
+Route::post('/pekerjaan/kolomstore', [PekerjaanController::class, 'kolomstore'])->name('admin.pekerjaan.kolomstore')->middleware('is_admin');
 
 
 // ----------------KARYAWAN--------------------
@@ -170,12 +196,29 @@ Route::get('/admin/karyawan/{id}/destroy', [KaryawanController::class, 'destroy'
 Route::get('/admin/karyawan/{id}/preview', [KaryawanController::class, 'show'])->name('admin.karyawan.preview')->middleware('is_admin');
 Route::get('/admin/karyawan/cetak', [KaryawanController::class, 'cetak_pdf'])->name('admin.karyawan.print')->middleware('is_admin');
 
+// ----------------USER--------------------
+Route::get('/admin/user', [UserProfileController::class, 'adminindex'])->name('admin.user.index')->middleware('is_admin');
+Route::get('/admin/user/create', [UserProfileController::class, 'admincreate'])->name('admin.user.create')->middleware('is_admin');
+Route::post('/admin/user/store', [UserProfileController::class, 'adminstore'])->name('admin.user.store')->middleware('is_admin');
+Route::get('/admin/user/{id}/edit', [UserProfileController::class, 'adminedit'])->name('admin.user.edit')->middleware('is_admin');
+Route::put('/admin/user/{id}/update', [UserProfileController::class, 'adminupdate'])->name('admin.user.update')->middleware('is_admin');
+Route::get('/admin/user/{id}/destroy', [UserProfileController::class, 'admindestroy'])->name('admin.user.destroy')->middleware('is_admin');
+Route::get('/admin/user/{id}/preview', [UserProfileController::class, 'adminshow'])->name('admin.user.preview')->middleware('is_admin');
+Route::get('/admin/user/cetak', [UserProfileController::class, 'cetak_pdf'])->name('admin.user.print')->middleware('is_admin');
+
 
 // ------------------------LAPORAN------------------------
 Route::get('/laporan/index', [LaporanPekerjaanController::class, 'index'])->name('laporan')->middleware('is_admin');
 Route::get('/laporan/add', [LaporanPekerjaanController::class, 'create'])->name('laporan.add')->middleware('is_admin');
 Route::post('/laporan/store', [LaporanPekerjaanController::class, 'store'])->name('laporan.store')->middleware('is_admin');
 Route::post('/laporan/kolomstore', [LaporanPekerjaanController::class, 'kolomstore'])->name('laporan.kolomstore')->middleware('is_admin');
+
+// ------------------------LAPORAN------------------------
+Route::get('/suratjalan/index', [SuratJalanController::class, 'index'])->name('suratjalan')->middleware('is_admin');
+Route::get('/suratjalan/add', [SuratJalanController::class, 'create'])->name('suratjalan.add')->middleware('is_admin');
+Route::post('/suratjalan/store', [SuratJalanController::class, 'store'])->name('suratjalan.store')->middleware('is_admin');
+Route::post('/suratjalan/kolomstore', [SuratJalanController::class, 'kolomstore'])->name('suratjalan.kolomstore')->middleware('is_admin');
+
 
 // --------------------------GAJI------------------------
 Route::get('/gaji/index', [GajiKaryawanController::class, 'index'])->name('gaji')->middleware('is_admin');
@@ -194,24 +237,29 @@ Route::get('/admin/settinglanding', function () {
 
 // ---------------------LANDING NAVBAR--------------------
 Route::get('/', [JumbotronController::class, 'landingindex'])->name('/');
-// Route::get('/', function () {
-//     return view('landingpage.home');
-// })->name('/');
-Route::get('/profile', function () {
-    return view('landingpage.profile');
-})->name('profile');
-Route::get('/galeri', function () {
-    return view('landingpage.galeri');
-})->name('galeri');
-Route::get('/kontak', function () {
-    return view('landingpage.kontak');
-})->name('kontak');
+
+Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+Route::get('/galeri', [GaleriController::class, 'landingindex'])->name('galeri');
+Route::get('/layanan', [LayananController::class, 'index'])->name('layanan');
+Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
+Route::post('/gotoWA', [KontakController::class, 'gotoWA'])->name('gotoWA');
+Route::get('/galeri', [GaleriController::class, 'landingindex'])->name('galeri');
+Route::get('/myprofile', [GaleriController::class, 'landingindex'])->name('myprofile');
+Route::post('/signup', [RegisterController::class, 'signup'])->name('signup');
+
+Route::get('/userprofile', [UserProfileController::class, 'index'])->name('userprofile');
+Route::get('/edituserprofile', [UserProfileController::class, 'edit'])->name('edituserprofile');
+Route::post('/storeuserprofile', [UserProfileController::class, 'store'])->name('storeuserprofile');
 
 Route::get('/testing', function () {
     return view('landingpage.test');
 });
 
 // -----------------------LANDING BARANG----------------------
+Route::get('/admin/daftarbarang', function () {
+    return view('adminpage.barangpages.daftarbarang');
+})->name('daftarbarang');
+
 Route::get('/kanopi', [CanopyController::class, 'landingindex'])->name('kanopi');
 Route::get('/menaratangkiair', [MenaraAirController::class, 'landingindex'])->name('menaratangkiair');
 Route::get('/pagarbesi', [PagarController::class, 'landingindex'])->name('pagarbesi');

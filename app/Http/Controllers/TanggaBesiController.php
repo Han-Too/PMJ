@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTanggaBesiRequest;
 use App\Http\Requests\UpdateTanggaBesiRequest;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 use Illuminate\Support\Facades\File;
@@ -31,14 +32,16 @@ class TanggaBesiController extends Controller
 
     public function landingindex()
     {
+        $user = Auth::user();
         $posttanggabesi = TanggaBesi::orderBy('created_at', 'desc')->get();
-        return view('landingpage.barang.barangtanggabesi', compact('posttanggabesi'));
+        return view('landingpage.barang.barangtanggabesi', compact('posttanggabesi','user'));
     }
 
     public function landingdetail($id)
     {
         $tanggabesi = TanggaBesi::find($id);
-        return view('landingpage.barang.detailbarang.tanggabesi', compact('tanggabesi'));
+        $user = Auth::user();
+        return view('landingpage.barang.detailbarang.tanggabesi', compact('tanggabesi','user'));
     }
     public function create()
     {
@@ -125,8 +128,9 @@ class TanggaBesiController extends Controller
             "bahan" => $request["bahan"],
             "deskripsi" => $request["deskripsi"],
             "jenis_produk" => $request["jenis_produk"],
+            "status" => $request["status"],
         ]);
-        toast('Tangga Besi has been edited !', 'success')->autoClose(1500)->width('400px');
+        Alert::success('Success', 'Data Tangga Besi has been uploaded !');
         return redirect('/admin/tanggabesi');
     }
 
